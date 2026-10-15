@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#0b0d12">
+  <meta name="description" content="Интерактивный офлайн-симулятор мобильной оболочки в стиле HyperOS">
+  <title>HyperOS Simulator</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="device" class="device theme-moonlight locked" data-theme="moonlight">
+    <div class="wallpaper wallpaper-moon" id="wallpaper"></div>
+    <div class="wallpaper-tint"></div>
+    <div class="brightness-shade" id="brightnessShade"></div>
+
+    <header class="status-bar" id="statusBar" aria-label="Строка состояния">
+      <span id="statusTime">22:14</span>
+      <div class="status-right">
+        <span class="status-network" title="Сеть">▂▄▆</span>
+        <svg viewBox="0 0 20 16" aria-label="Wi-Fi"><path d="M1 5.5C6 1.3 14 1.3 19 5.5M4 9c3.5-3 8.5-3 12 0M7.3 12.3c1.6-1.4 3.8-1.4 5.4 0M10 15h.01"/></svg>
+        <div class="battery"><span id="batteryFill"></span></div>
+        <span id="batteryText">86%</span>
+      </div>
+    </header>
+
+    <button id="dynamicIsland" class="dynamic-island" aria-label="Открыть Dynamic Island" aria-expanded="false">
+      <span class="island-camera"></span><span class="island-content" id="islandContent"></span>
+    </button>
+
+    <main id="lockScreen" class="lock-screen screen-active" aria-label="Экран блокировки">
+      <div class="lock-topline"><span id="lockWeather">☾  12°</span><span class="lock-battery">● <span id="lockBattery">86%</span></span></div>
+      <div class="lock-clock-wrap">
+        <div class="lock-date" id="lockDate">Четверг, 15 октября</div>
+        <div class="lock-clock" id="lockClock">22:14</div>
+        <div class="lock-subtitle">Лунный свет · тихий режим</div>
+      </div>
+      <div class="lock-notifications" id="lockNotifications">
+        <div class="lock-notification-icon">✦</div>
+        <div><strong>Добро пожаловать</strong><span>Твой телефон уже готов к работе</span></div>
+        <time>сейчас</time>
+      </div>
+      <div class="lock-bottom">
+        <button class="round-shortcut" id="lockFlash" aria-label="Фонарик"><span>◉</span></button>
+        <button class="unlock-hint" id="unlockHint"><span>Проведите вверх, чтобы разблокировать</span><i></i></button>
+        <button class="round-shortcut" id="lockCamera" aria-label="Камера"><span>▣</span></button>
+      </div>
+    </main>
+
+    <main id="homeScreen" class="home-screen" aria-label="Рабочий стол" aria-hidden="true">
+      <section class="home-widget-area">
+        <div class="hello-line"><span id="homeGreeting">Добрый вечер</span><span class="home-dot">●</span></div>
+        <div class="home-big-time" id="homeClock">22:14</div>
+        <div class="home-date-weather"><span id="homeDate">Четверг, 15 октября</span><span class="weather-inline">☾ <b>12°</b> <small>Ясно</small></span></div>
+        <button class="search-pill" id="searchButton"><span>⌕</span><span>Поиск приложений и контента</span><kbd>⌘ K</kbd></button>
+      </section>
+      <section class="app-pages" id="appPages" aria-label="Приложения рабочего стола">
+        <div class="app-page active-page" data-page="0" id="page0"></div>
+        <div class="app-page" data-page="1" id="page1"></div>
+      </section>
+      <div class="page-indicators" id="pageIndicators"><span class="active"></span><span></span></div>
+      <section class="dock" id="dock" aria-label="Док"></section>
+    </main>
+
+    <section id="appLayer" class="app-layer" aria-hidden="true">
+      <div class="app-backdrop" id="appBackdrop"></div>
+      <article class="app-window" id="appWindow" role="application" aria-label="Приложение">
+        <header class="app-header" id="appHeader">
+          <button class="app-back" id="appBack" aria-label="Назад">‹</button>
+          <div class="app-heading"><span id="appEyebrow">ПРИЛОЖЕНИЕ</span><h1 id="appTitle">Настройки</h1></div>
+          <button class="app-header-action" id="appHeaderAction" aria-label="Дополнительные действия">•••</button>
+        </header>
+        <div id="appContent" class="app-content"></div>
+      </article>
+    </section>
+
+    <section id="controlCenter" class="system-panel" aria-label="Центр управления" aria-hidden="true">
+      <div class="panel-handle"></div>
+      <div class="panel-top"><div><small id="panelDate">ЧЕТВЕРГ, 15 ОКТЯБРЯ</small><h2 id="panelClock">22:14</h2></div><button id="panelSettings" class="round-action" aria-label="Настройки">⚙</button></div>
+      <div class="quick-grid" id="quickGrid"></div>
+      <div class="range-card"><div><span>☼</span><span>Яркость</span><b id="brightnessLabel">90%</b></div><input id="brightnessSlider" aria-label="Яркость интерфейса" type="range" min="45" max="120" value="90"></div>
+      <div class="range-card"><div><span>♫</span><span>Громкость симулятора</span><b id="volumeLabel">65%</b></div><input id="volumeSlider" aria-label="Громкость симулятора" type="range" min="0" max="100" value="65"></div>
+      <div class="panel-footer"><span>HyperOS Simulator</span><span id="panelBattery">86% · симуляция</span></div>
+    </section>
+
+    <section id="notificationShade" class="system-panel notification-shade" aria-label="Уведомления" aria-hidden="true">
+      <div class="panel-handle"></div>
+      <div class="notification-head"><div><small>УВЕДОМЛЕНИЯ</small><h2>Сегодня</h2></div><button id="clearNotifications" class="text-action">Очистить</button></div>
+      <div id="notificationList" class="notification-list"></div>
+      <div id="emptyNotifications" class="empty-notifications"><div class="empty-orbit">✦</div><strong>Пока тихо</strong><span>Новые уведомления появятся здесь</span></div>
+      <button class="notification-settings" id="notificationSettings">Управление уведомлениями <span>›</span></button>
+    </section>
+
+    <section id="recentsScreen" class="recents-screen" aria-label="Недавние приложения" aria-hidden="true">
+      <div class="recents-title"><span>Недавние</span><button id="clearRecents">Очистить всё</button></div>
+      <div id="recentsCards" class="recents-cards"></div>
+      <button id="recentsHome" class="recents-home">На главный экран</button>
+    </section>
+
+    <section id="pinScreen" class="pin-screen" aria-hidden="true">
+      <div class="pin-icon">◈</div><h2>Введите PIN-код</h2><p>Разблокировка симулятора</p>
+      <div class="pin-dots" id="pinDots"><i></i><i></i><i></i><i></i></div>
+      <div id="pinError" class="pin-error"></div>
+      <div class="pin-keypad" id="pinKeypad"></div>
+      <button id="pinCancel" class="pin-cancel">Отмена</button>
+    </section>
+
+    <div id="toastHost" class="toast-host" aria-live="polite"></div>
+    <div id="modalHost" class="modal-host"></div>
+    <div id="gestureOverlay" class="gesture-overlay" aria-hidden="true"></div>
+    <button id="homeIndicator" class="home-indicator" aria-label="На главный экран"><span></span></button>
+  </div>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+    }
+  </script>
+</body>
+</html>
